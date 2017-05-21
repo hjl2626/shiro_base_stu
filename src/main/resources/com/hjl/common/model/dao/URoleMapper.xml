@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjl.common.model.dao.URoleMapper" >
+  <resultMap id="BaseResultMap" type="com.hjl.common.model.domain.URole" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `name`, `type`
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from `shiro-stu`.u_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from `shiro-stu`.u_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hjl.common.model.domain.URole" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `shiro-stu`.u_role (id, `name`, `type`
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hjl.common.model.domain.URole" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `shiro-stu`.u_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="type != null" >
+        `type`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hjl.common.model.domain.URole" >
+    update `shiro-stu`.u_role
+    <set >
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hjl.common.model.domain.URole" >
+    update `shiro-stu`.u_role
+    set `name` = #{name,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+    <select id="selectRolesByUserName" resultType="java.lang.String" parameterType="java.lang.String" >
+      SELECT
+        ur.type
+      FROM
+        u_role ur,
+        u_user uu,
+        u_user_role uur
+      WHERE
+        uu.username = 'admin'
+      and
+        uu.id = uur.uid
+      AND uur.rid = ur.id
+  </select>
+  
+  
+  <select id="selectRolesByUserId" resultType="java.lang.String" parameterType="java.lang.Long" >
+    SELECT
+      ur.type
+    FROM
+      u_role ur,
+      u_user_role uur
+    WHERE
+      uur.uid = #{userId}
+    and
+      uur.rid = ur.id
+  </select>
+  
+</mapper>

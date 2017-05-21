@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjl.common.model.dao.UPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.hjl.common.model.domain.UPermission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, url, `name`
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from `shiro-stu`.u_permission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from `shiro-stu`.u_permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hjl.common.model.domain.UPermission" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `shiro-stu`.u_permission (id, url, `name`)
+    values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hjl.common.model.domain.UPermission" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `shiro-stu`.u_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hjl.common.model.domain.UPermission" >
+    update `shiro-stu`.u_permission
+    <set >
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hjl.common.model.domain.UPermission" >
+    update `shiro-stu`.u_permission
+    set url = #{url,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="selectPermissionsByUserId" resultType="java.lang.String" parameterType="java.lang.Long" >
+        SELECT
+			up.url
+		FROM
+			`shiro-stu`.u_permission up,
+			`shiro-stu`.u_role_permission urp,
+			`shiro-stu`.u_user_role uur
+		WHERE
+			uur.uid = #{userId}
+		AND uur.rid = urp.rid
+		AND urp.pid = up.id
+  </select>
+  
+  <select id="selectPermissionsByUserName" resultType="java.lang.String" parameterType="java.lang.String">
+      SELECT
+         up.url
+      FROM
+        u_permission up,
+        u_role_permission urp,
+        u_user_role uur,
+        u_user uu
+      WHERE
+         uu.username = #{username}
+      and
+         uu.id = uur.uid
+      AND uur.rid = urp.rid
+      AND urp.pid = up.id
+  </select>
+  
+</mapper>
