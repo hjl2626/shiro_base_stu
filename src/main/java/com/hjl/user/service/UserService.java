@@ -16,7 +16,7 @@ public interface UserService {
 	
 	UUser getUserByUserName(String usernamel);
 	
-	UUser login(String usernameOrEmail , String password);
+	UUser login(String username , String password);
 	
 	Set<String> getPermissionsByUserId(Long userId);
 	

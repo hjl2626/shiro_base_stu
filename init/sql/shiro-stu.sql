@@ -12,6 +12,7 @@ File Encoding         : 65001
 
 Date: 2017-05-22 00:01:43
 */
+use `shiro-stu`;
 
 SET FOREIGN_KEY_CHECKS=0;
 

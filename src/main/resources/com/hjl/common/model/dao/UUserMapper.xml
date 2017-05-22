@@ -175,14 +175,14 @@
 	
 	
 	
-	<select id="login" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="login" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List"/>
 		from `shiro-stu`.u_user
 		where
 		username = #{username,jdbcType=VARCHAR}
 		and
-		password = #{password ,jdbcType=VARCHAR}
+		pswd = #{password ,jdbcType=VARCHAR}
 	</select>
 	
 
